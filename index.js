@@ -20,6 +20,11 @@ const generateItemElement = function (item) {
     <li class='js-item-element' data-item-id='${item.id}'>
       ${itemTitle}
       <div class='shopping-item-controls'>
+        <form class="edit-item-name-form">
+        <label for="item-name-edit">Edit Item Name</label>
+        <input type="text" name="item-name-edit" class="js-edit-item-name" placeholder="e.g., broccoli">
+        <button type="submit">Edit Item</button>
+        </form>
         <button class='shopping-item-toggle js-item-toggle'>
           <span class='button-label'>check</span>
         </button>
@@ -75,6 +80,22 @@ const handleNewItemSubmit = function () {
     render();
   });
 };
+
+function handleEditItemSubmit () {
+  $('.edit-item-name-form').submit(event => {
+    event.preventDefault();
+    const id = getItemIdFromElement(event.currentTarget);
+    editItemName(id);
+  });
+}
+
+function editItemName(id) {
+  const foundItem = store.items.find(item => item.id === id);
+  const editedItemName = $('.js-edit-item-name').val('');
+  foundItem.name = editedItemName;
+  console.log(editedItemName);
+  render();
+}
 
 const toggleCheckedForListItem = function (id) {
   const foundItem = store.items.find(item => item.id === id);
@@ -160,6 +181,8 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleEditItemSubmit();
+  //editItemName();
 };
 
 // when the page loads, call `handleShoppingList`
